@@ -1,0 +1,29 @@
+{% extends 'feed/base_generic.html'%}
+{% load static %}
+
+
+{% block content %}
+  <div class="section-messages">
+    <div class="section-messages-chats-panel">
+      <h1>Messages</h1>
+      <ul>
+        {% for chat in chats %}
+          <li>
+            <button onclick="myfunction({{chat.id}})">
+              {% if chat.members.first.user == user %}
+                <p><b>{{chat.members.last.full_name}}</b> <i>@{{chat.members.last}}</i></p>
+              {% elif chat.members.last.user == user %}
+                <p><b>{{chat.members.first.full_name}}</b> <i>@{{chat.members.first}}</p>
+              {% endif %}
+              <p>{{chat.messages.last.message}}</p>
+              <p>{{chat.messages.last.sent_at}}</p>
+            </button>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="section-messages-chat-window">
+
+    </div>
+  </div>
+{% endblock %}

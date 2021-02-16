@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel='stylesheet' type='text/css' href='{% static "feed/style.css" %}'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title></title>
+  </head>
+  <body>
+    <div class='container'>
+      <nav>
+        <ul>
+          <a id="nav-twitter-logo" href="#"><img src="{% static 'feed/icons/twitter-brands.svg'%}" alt="Twitter Logo"></a>
+          <li><a href="{% url 'feed:home' %}"><img src="{% static 'feed/icons/home.svg' %}" alt=""><p>Home</p></a></li>
+          <li><a href="{% url 'feed:profile' %}"><img src="{% static 'feed/icons/user.svg' %}" alt=""><p>Profile</p></a></li>
+          <!-- <li><a href="{#% url 'feed:messages' %#}"><img src="{#% static 'feed/icons/email.svg' %#}" alt=""><p>Messages</p></a></li> -->
+          <button>Tweet</button>
+        </ul>
+        <div>
+          <div class="mini_profile_pic"><img src="{%static 'feed/icons/user_generic.svg'%}" alt="User profile picture"></div>
+          <p>{{user.first_name}}</p>
+          <p>@{{user.username}}</p>
+        </div>
+      </nav>
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+{% extends 'feed/base_generic.html'%}
+{% load static %}
+
+
+{% block content %}
+  <div class="home-section">
+    <h1>Home</h1>
+    <div>
+        <form action="{% url 'feed:tweet' %}" method="post">
+          {% csrf_token %}
+          <textarea name="tweet" rows="4" cols="45" placeholder="What's happening?"></textarea>
+          <input type="submit" value="Tweet">
+        </form>
+    </div>
+
+    <ul style='border: 2px solid rgb(155, 156, 155)'>
+    {% for tweet in feed  %}
+        <li>
+          {% if tweet.retweets_to %}
+          <div class="">
+            <b><u>{{tweet.author.user.first_name}} {{tweet.author.user.last_name}}</u>@{{tweet.author.user.username}}</b> <i>RETWEETED</i>
+            <form action="{% url 'feed:follow' tweet.author.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px">follow+</button></form>
+            <div class="mini_profile_pic">
+              <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+            </div>
+            <a href="#"><b>{{tweet.retweets_to.author.user.first_name}} {{tweet.retweets_to.author.user.last_name}}</b>@{{tweet.retweets_to.author.user.username}}</a>
+            <p>{{tweet.retweets_to.post_date}}</p>
+            <p>{{tweet.retweets_to.text}}</p>
+            <ul style="display:flex;flex-direction:row;">
+              <form action="{% url 'feed:like' tweet.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px"><i class="fa fa-heart" style='font-size:18px;color:red;'></i></button></form>
+              <form action="{% url 'feed:retweet' tweet.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px">RT</button></form>
+            </ul>
+
+            <p>
+              {{tweet.retweets_to.likes_count}} <u>Likes</u>
+              {{tweet.retweets_to.retweets_count}} <u>Retweets</u>
+              {{tweet.retweets_to.replies_count}} <u>Replies</u>
+            </p>
+          </div>
+          {% elif tweet.replies_to %}
+            <div class="">
+              <p><i>Replying to:</i><b>@{{tweet.replies_to.author.user.username}}</b></p>
+              <div class="mini_profile_pic">
+                <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+              </div>
+              <a href="#"><b>{{tweet.author.user.first_name}} {{tweet.author.user.last_name}}</b>@{{tweet.author.user.username}}</a>
+              <form action="{% url 'feed:follow' tweet.author.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px">follow+</button></form>
+              <p>{{tweet.post_date}}</p>
+              <p>{{tweet.text}}</p>
+              <ul style="display:flex;flex-direction:row;">
+                <form action="{% url 'feed:like' tweet.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px"><i class="fa fa-heart" style='font-size:18px;color:red;'></i></button></form>
+                <form action="{% url 'feed:retweet' tweet.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px">RT</button></form>
+              </ul>
+              <p>
+                {{tweet.likes_count}} <u>Likes</u>
+                {{tweet.retweets_count}} <u>Retweets</u>
+                {{tweet.replies_count}} <u>Replies</u>
+              </p>
+            </div>
+          {% elif tweet.quotes %}
+            <!-- Parent Tweet -->
+            <div class="">
+              <div class="mini_profile_pic">
+                <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+              </div>
+              <a href="#"><b>{{tweet.author.user.first_name}} {{tweet.author.user.last_name}}</b>@{{tweet.author.user.username}}</a>
+              <form action="{% url 'feed:follow' tweet.author.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px">follow+</button></form>
+              <p>{{tweet.post_date}}</p>
+              <p>{{tweet.text}}</p>
+              <!-- Quoted Tweet -->
+              <div class="" style='margin:5px;border:2px solid black;'>
+                <div class="mini_profile_pic">
+                  <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+                </div>
+                <a href="#"><b>{{tweet.quotes.author.user.first_name}} {{tweet.quotes.author.user.last_name}}</b>@{{tweet.quotes.author.user.username}}</a>
+                <p>{{tweet.quotes.post_date}}</p>
+                <p>{{tweet.quotes.text}}</p>
+              </div>
+              <ul style="display:flex;flex-direction:row;">
+                <form action="{% url 'feed:like' tweet.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px"><i class="fa fa-heart" style='font-size:18px;color:red;'></i></button></form>
+                <form action="{% url 'feed:retweet' tweet.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px">RT</button></form>
+              </ul>
+              <p>
+                 {{tweet.likes_count}} <u>Likes</u>
+                 {{tweet.retweets_count}} <u>Retweets</u>
+                 {{tweet.replies_count}} <u>Replies</u>
+               </p>
+            </div>
+          {% else %}
+            <div>
+              <div class="mini_profile_pic">
+                <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+              </div>
+              <a href="#"><b>{{tweet.author.user.first_name}} {{tweet.author.user.last_name}}</b>@{{tweet.author.user.username}}</a>
+              <form action="{% url 'feed:follow' tweet.author.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px">follow+</button></form>              <p>{{tweet.post_date}}</p>
+              <p>{{tweet.text}}</p>
+              <ul style="display:flex;flex-direction:row;">
+                <form action="{% url 'feed:like' tweet.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px"><i class="fa fa-heart" style='font-size:18px;color:red;'></i></button></form>
+                <form action="{% url 'feed:retweet' tweet.id %}" method="post">{%csrf_token%}<button type="submit" style="font-size:24px">RT</button></form>
+              </ul>
+              <p>
+                {{tweet.likes_count}} <u>Likes</u>
+                {{tweet.retweets_count}} <u>Retweets</u>
+                {{tweet.replies_count}} <u>Replies</u>
+              </p>
+            </div>
+          {% endif %}
+        </li>
+        <hr>
+    {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'feed/base_generic.html'%}
+{% load static %}
+
+
+{% block content %}
+  <div class="profile-section">
+
+      <h1>{{user.twitteruser.full_name}}</h1>
+      <ul style='border: 2px solid rgb(155, 156, 155)'>
+      {% for tweet in feed  %}
+
+          <li>
+            {% if tweet.retweets_to %}
+            <div class="">
+              <b><u>{{tweet.author.user.first_name}} {{tweet.author.user.last_name}}</u>@{{tweet.author.user.username}}</b> <i>RETWEETED</i>
+              <div class="mini_profile_pic">
+                <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+              </div>
+              <a href="#"><b>{{tweet.retweets_to.author.user.first_name}} {{tweet.retweets_to.author.user.last_name}}</b>@{{tweet.retweets_to.author.user.username}}</a>
+              <p>{{tweet.retweets_to.post_date}}</p>
+              <p>{{tweet.retweets_to.text}}</p>
+              <p>{{tweet.retweets_to.likes_count}} Likes</p>
+              <p>{{tweet.retweets_to.retweets_count}} Retweets</p>
+              <p>{{tweet.retweets_to.replies_count}} Replies</p>
+            </div>
+            {% elif tweet.replies_to %}
+              <div class="">
+                <p><i>Replying to:</i><b>@{{tweet.replies_to.author.user.username}}</b></p>
+                <div class="mini_profile_pic">
+                  <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+                </div>
+                <a href="#"><b>{{tweet.author.user.first_name}} {{tweet.author.user.last_name}}</b>@{{tweet.author.user.username}}</a>
+                <p>{{tweet.post_date}}</p>
+                <p>{{tweet.text}}</p>
+                <p>{{tweet.likes_count}} Likes</p>
+                <p>{{tweet.retweets_count}} Retweets</p>
+                <p>{{tweet.replies_count}} Replies</p>
+              </div>
+            {% elif tweet.quotes %}
+              <!-- Parent Tweet -->
+              <div class="">
+                <div class="mini_profile_pic">
+                  <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+                </div>
+                <a href="#"><b>{{tweet.author.user.first_name}} {{tweet.author.user.last_name}}</b>@{{tweet.author.user.username}}</a>
+                <p>{{tweet.post_date}}</p>
+                <p>{{tweet.text}}</p>
+                <!-- Quoted Tweet -->
+                <div class="" style='margin:5px;border:2px solid black;'>
+                  <div class="mini_profile_pic">
+                    <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+                  </div>
+                  <a href="#"><b>{{tweet.quotes.author.user.first_name}} {{tweet.quotes.author.user.last_name}}</b>@{{tweet.quotes.author.user.username}}</a>
+                  <p>{{tweet.quotes.post_date}}</p>
+                  <p>{{tweet.quotes.text}}</p>
+                </div>
+                <p>{{tweet.likes_count}} Likes</p>
+                <p>{{tweet.retweets_count}} Retweets</p>
+                <p>{{tweet.replies_count}} Replies</p>
+              </div>
+            {% else %}
+              <div>
+                <div class="mini_profile_pic">
+                  <img src="{% static 'feed/icons/user_generic.svg' %}" alt="User profile picture">
+                </div>
+                <a href="#"><b>{{tweet.author.user.first_name}} {{tweet.author.user.last_name}}</b>@{{tweet.author.user.username}}</a>
+                <p>{{tweet.post_date}}</p>
+                <p>{{tweet.text}}</p>
+                <p>{{tweet.likes_count}} Likes</p>
+                <p>{{tweet.retweets_count}} Retweets</p>
+                <p>{{tweet.replies_count}} Replies</p>
+              </div>
+            {% endif %}
+          </li>
+          <hr>
+      {% endfor %}
+      </ul>
+  </div>
+{% endblock %}
